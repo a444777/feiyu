@@ -10,3 +10,9 @@ def test_health_returns_ready_status() -> None:
 
     assert response.status_code == 200
     assert response.json() == {"status": "ok"}
+
+
+def test_preview_route_is_registered() -> None:
+    paths = {route.path for route in app.routes}
+
+    assert "/preview" in paths

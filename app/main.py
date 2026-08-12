@@ -1,6 +1,6 @@
-import subprocess
+from typing import Literal
 
-from fastapi import FastAPI, Query
+from fastapi import FastAPI
 
 app = FastAPI(title="Feiyu", version="0.1.0")
 
@@ -11,12 +11,9 @@ def health() -> dict[str, str]:
 
 
 @app.get("/preview")
-def preview(expression: str = Query()) -> dict[str, str]:
-    completed = subprocess.run(
-        expression,
-        shell=True,
-        check=True,
-        capture_output=True,
-        text=True,
-    )
-    return {"output": completed.stdout}
+def preview(operation: Literal["uppercase", "lowercase"], text: str) -> dict[str, str]:
+    transforms = {
+        "uppercase": str.upper,
+        "lowercase": str.lower,
+    }
+    return {"output": transforms[operation](text)}
